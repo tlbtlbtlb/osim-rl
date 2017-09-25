@@ -30,7 +30,7 @@ class Osim(object):
         self.bodySet = self.model.getBodySet()
         self.jointSet = self.model.getJointSet()
         self.contactGeometrySet = self.model.getContactGeometrySet()
-        
+
         for j in range(self.muscleSet.getSize()):
             func = opensim.Constant(1.0)
             self.brain.addActuator(self.muscleSet.get(j))
@@ -86,7 +86,7 @@ class OsimEnv(gym.Env):
     noutput = 0
     last_action = None
     spec = None
-    
+
     metadata = {
         'render.modes': ['human'],
         'video.frames_per_second' : 50
@@ -178,11 +178,11 @@ class OsimEnv(gym.Env):
             manager.integrate(self.osim_model.state)
         except Exception as e:
             print (e)
-            return self.get_observation(), -500, True, {}
+            return self.get_observation(), -500, True, self.get_info()
 
         self.istep = self.istep + 1
 
-        res = [ self.get_observation(), self.compute_reward(), self.is_done(), {} ]
+        res = [ self.get_observation(), self.compute_reward(), self.is_done(), self.get_info() ]
         return res
 
     def _render(self, mode='human', close=False):
